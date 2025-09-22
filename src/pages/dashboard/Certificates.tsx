@@ -219,9 +219,10 @@ export default function Certificates() {
             </Button>
           </div>
 
-          {/* Certificates Table */}
+          {/* Certificates Table - Responsive */}
           <div className="space-y-4">
-            <div className="grid grid-cols-9 gap-4 text-sm font-medium text-muted-foreground border-b pb-3">
+            {/* Table header for md+ screens */}
+            <div className="hidden md:grid grid-cols-9 gap-4 text-sm font-medium text-muted-foreground border-b pb-3">
               <div className="col-span-1">Certificate ID</div>
               <div className="col-span-1">Vehicle</div>
               <div className="col-span-1">Holder</div>
@@ -232,24 +233,22 @@ export default function Certificates() {
               <div className="col-span-1">Insurer</div>
               <div className="col-span-1">Actions</div>
             </div>
-            
+            {/* Table rows */}
             {filteredCertificates.map((cert, index) => (
-              <div key={index} className="grid grid-cols-9 gap-4 text-sm items-center py-3 border-b border-muted/50 hover:bg-muted/30 rounded-lg px-2 -mx-2">
-                <div className="col-span-1">
-                  <div className="font-mono text-xs">{cert.id}</div>
-                </div>
-                <div className="col-span-1">
-                  <div className="font-medium">{cert.vehicleNumber}</div>
-                  <div className="text-xs text-muted-foreground">{cert.policyNumber}</div>
-                </div>
-                <div className="col-span-1">{cert.holderName}</div>
-                <div className="col-span-1 text-muted-foreground">{cert.issueDate}</div>
-                <div className="col-span-1 text-muted-foreground">{cert.expiryDate}</div>
-                <div className="col-span-1 font-medium">{cert.premium}</div>
-                <div className="col-span-1">
-                  <div className="flex items-center space-x-2">
-                    {getStatusIcon(cert.status)}
-                    <Badge 
+              <div
+                key={index}
+                className="md:grid md:grid-cols-9 gap-4 text-sm items-center py-3 border-b border-muted/50 hover:bg-muted/30 rounded-lg px-2 -mx-2 flex flex-col md:flex-row md:items-center"
+              >
+                {/* Mobile stacked layout */}
+                <div className="flex md:hidden flex-col w-full space-y-1 mb-2">
+                  <div className="flex justify-between"><span className="font-semibold">Certificate ID</span><span className="font-mono text-xs">{cert.id}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Vehicle</span><span>{cert.vehicleNumber}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Policy</span><span className="text-xs text-muted-foreground">{cert.policyNumber}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Holder</span><span>{cert.holderName}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Issue Date</span><span>{cert.issueDate}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Expiry Date</span><span>{cert.expiryDate}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Premium</span><span>{cert.premium}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Status</span><span><span className="inline-flex items-center space-x-1">{getStatusIcon(cert.status)}<Badge 
                       variant={
                         cert.status === 'Active' ? 'secondary' : 
                         cert.status === 'Expiring Soon' ? 'outline' : 
@@ -258,20 +257,38 @@ export default function Certificates() {
                       }
                     >
                       {cert.status}
-                    </Badge>
+                    </Badge></span></span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Insurer</span><span className="text-xs text-muted-foreground">{cert.insurer}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Actions</span>
+                    <span className="flex space-x-2">
+                      <Button variant="ghost" size="sm" title="View Certificate"><Eye className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm" title="QR Code"><QrCode className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm" title="Download"><Download className="h-4 w-4" /></Button>
+                    </span>
                   </div>
                 </div>
-                <div className="col-span-1 text-xs text-muted-foreground">{cert.insurer}</div>
-                <div className="col-span-1 flex space-x-2">
-                  <Button variant="ghost" size="sm" title="View Certificate">
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" title="QR Code">
-                    <QrCode className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm" title="Download">
-                    <Download className="h-4 w-4" />
-                  </Button>
+                {/* Desktop grid layout */}
+                <div className="hidden md:block col-span-1"><div className="font-mono text-xs">{cert.id}</div></div>
+                <div className="hidden md:block col-span-1"><div className="font-medium">{cert.vehicleNumber}</div><div className="text-xs text-muted-foreground">{cert.policyNumber}</div></div>
+                <div className="hidden md:block col-span-1">{cert.holderName}</div>
+                <div className="hidden md:block col-span-1 text-muted-foreground">{cert.issueDate}</div>
+                <div className="hidden md:block col-span-1 text-muted-foreground">{cert.expiryDate}</div>
+                <div className="hidden md:block col-span-1 font-medium">{cert.premium}</div>
+                <div className="hidden md:block col-span-1"><div className="flex items-center space-x-2">{getStatusIcon(cert.status)}<Badge 
+                      variant={
+                        cert.status === 'Active' ? 'secondary' : 
+                        cert.status === 'Expiring Soon' ? 'outline' : 
+                        cert.status === 'Expired' ? 'destructive' :
+                        'outline'
+                      }
+                    >
+                      {cert.status}
+                    </Badge></div></div>
+                <div className="hidden md:block col-span-1 text-xs text-muted-foreground">{cert.insurer}</div>
+                <div className="hidden md:block col-span-1 space-x-2">
+                  <Button variant="ghost" size="sm" title="View Certificate"><Eye className="h-4 w-4" /></Button>
+                  <Button variant="ghost" size="sm" title="QR Code"><QrCode className="h-4 w-4" /></Button>
+                  <Button variant="ghost" size="sm" title="Download"><Download className="h-4 w-4" /></Button>
                 </div>
               </div>
             ))}

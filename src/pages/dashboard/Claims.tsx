@@ -286,7 +286,8 @@ export default function Claims() {
           </div>
 
           <div className="space-y-4">
-            <div className="grid grid-cols-10 gap-4 text-sm font-medium text-muted-foreground border-b pb-3">
+            {/* Table header for md+ screens */}
+            <div className="hidden md:grid grid-cols-10 gap-4 text-sm font-medium text-muted-foreground border-b pb-3">
               <div className="col-span-1">Claim ID</div>
               <div className="col-span-1">Claimant</div>
               <div className="col-span-1">Vehicle</div>
@@ -298,51 +299,53 @@ export default function Claims() {
               <div className="col-span-1">Flags</div>
               <div className="col-span-1">Actions</div>
             </div>
-            
+            {/* Table rows */}
             {filteredClaims.map((claim, index) => (
-              <div key={index} className="grid grid-cols-10 gap-4 text-sm items-center py-3 border-b border-muted/50 hover:bg-muted/30 rounded-lg px-2 -mx-2">
-                <div className="col-span-1">
-                  <div className="font-medium">{claim.id}</div>
-                  <div className="text-xs text-muted-foreground">{claim.policyNumber}</div>
-                </div>
-                <div className="col-span-1">{claim.claimant}</div>
-                <div className="col-span-1">
-                  <div className="font-medium">{claim.vehicleNumber}</div>
-                  <div className="text-xs text-muted-foreground">{claim.incidentDate}</div>
-                </div>
-                <div className="col-span-1 font-medium">{claim.amount}</div>
-                <div className="col-span-1">
-                  <Badge variant={getStatusBadgeVariant(claim.status)}>
-                    {claim.status}
-                  </Badge>
-                </div>
-                <div className={`col-span-1 font-medium ${getPriorityColor(claim.priority)}`}>
-                  {claim.priority}
-                </div>
-                <div className="col-span-1">
-                  <div className="flex items-center space-x-1">
-                    <Clock className="h-3 w-3 text-muted-foreground" />
-                    <span>{claim.slaTimer}</span>
+              <div
+                key={index}
+                className="md:grid md:grid-cols-10 gap-4 text-sm items-center py-3 border-b border-muted/50 hover:bg-muted/30 rounded-lg px-2 -mx-2 flex flex-col md:flex-row md:items-center"
+              >
+                {/* Mobile stacked layout */}
+                <div className="flex md:hidden flex-col w-full space-y-1 mb-2">
+                  <div className="flex justify-between"><span className="font-semibold">Claim ID</span><span className="font-medium">{claim.id}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Policy</span><span className="text-xs text-muted-foreground">{claim.policyNumber}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Claimant</span><span>{claim.claimant}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Vehicle</span><span>{claim.vehicleNumber}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Incident Date</span><span className="text-xs text-muted-foreground">{claim.incidentDate}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Amount</span><span className="font-medium">{claim.amount}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Status</span><span><Badge variant={getStatusBadgeVariant(claim.status)}>{claim.status}</Badge></span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Priority</span><span className={getPriorityColor(claim.priority)}>{claim.priority}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">SLA Timer</span><span className="flex items-center space-x-1"><Clock className="h-3 w-3 text-muted-foreground" /><span>{claim.slaTimer}</span></span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Adjuster</span><span className="text-xs">{claim.adjuster}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Flags</span>
+                    <span>
+                      {claim.fraudFlag && (
+                        <span className="flex items-center space-x-1"><Flag className="h-4 w-4 text-destructive" /><span className="text-xs text-destructive">Fraud</span></span>
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex justify-between"><span className="font-semibold">Actions</span>
+                    <span className="flex space-x-2">
+                      <Button variant="ghost" size="sm" title="View Claim"><Eye className="h-4 w-4" /></Button>
+                      {claim.fraudFlag && (<Button variant="ghost" size="sm" title="Fraud Alert"><AlertTriangle className="h-4 w-4 text-destructive" /></Button>)}
+                    </span>
                   </div>
                 </div>
-                <div className="col-span-1 text-xs">{claim.adjuster}</div>
-                <div className="col-span-1">
-                  {claim.fraudFlag && (
-                    <div className="flex items-center space-x-1">
-                      <Flag className="h-4 w-4 text-destructive" />
-                      <span className="text-xs text-destructive">Fraud</span>
-                    </div>
-                  )}
+                {/* Desktop grid layout */}
+                <div className="hidden md:block col-span-1"><div className="font-medium">{claim.id}</div><div className="text-xs text-muted-foreground">{claim.policyNumber}</div></div>
+                <div className="hidden md:block col-span-1">{claim.claimant}</div>
+                <div className="hidden md:block col-span-1"><div className="font-medium">{claim.vehicleNumber}</div><div className="text-xs text-muted-foreground">{claim.incidentDate}</div></div>
+                <div className="hidden md:block col-span-1 font-medium">{claim.amount}</div>
+                <div className="hidden md:block col-span-1"><Badge variant={getStatusBadgeVariant(claim.status)}>{claim.status}</Badge></div>
+                <div className={`hidden md:block col-span-1 font-medium ${getPriorityColor(claim.priority)}`}>{claim.priority}</div>
+                <div className="hidden md:block col-span-1"><div className="flex items-center space-x-1"><Clock className="h-3 w-3 text-muted-foreground" /><span>{claim.slaTimer}</span></div></div>
+                <div className="hidden md:block col-span-1 text-xs">{claim.adjuster}</div>
+                <div className="hidden md:block col-span-1">
+                  {claim.fraudFlag && (<div className="flex items-center space-x-1"><Flag className="h-4 w-4 text-destructive" /><span className="text-xs text-destructive">Fraud</span></div>)}
                 </div>
-                <div className="col-span-1 flex space-x-2">
-                  <Button variant="ghost" size="sm" title="View Claim">
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  {claim.fraudFlag && (
-                    <Button variant="ghost" size="sm" title="Fraud Alert">
-                      <AlertTriangle className="h-4 w-4 text-destructive" />
-                    </Button>
-                  )}
+                <div className="hidden md:block col-span-1 space-x-2">
+                  <Button variant="ghost" size="sm" title="View Claim"><Eye className="h-4 w-4" /></Button>
+                  {claim.fraudFlag && (<Button variant="ghost" size="sm" title="Fraud Alert"><AlertTriangle className="h-4 w-4 text-destructive" /></Button>)}
                 </div>
               </div>
             ))}

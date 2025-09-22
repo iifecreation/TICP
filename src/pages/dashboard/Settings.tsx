@@ -319,7 +319,8 @@ export default function Settings() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="grid grid-cols-6 gap-4 text-sm font-medium text-muted-foreground border-b pb-3">
+            {/* Table header for md+ screens */}
+            <div className="hidden md:grid grid-cols-6 gap-4 text-sm font-medium text-muted-foreground border-b pb-3">
               <div>Name</div>
               <div>Email</div>
               <div>Role</div>
@@ -327,27 +328,35 @@ export default function Settings() {
               <div>Last Login</div>
               <div>Actions</div>
             </div>
-            
+            {/* Table rows */}
             {users.map((user) => (
-              <div key={user.id} className="grid grid-cols-6 gap-4 text-sm items-center py-3 border-b border-muted/50 hover:bg-muted/30 rounded-lg px-2 -mx-2">
-                <div className="font-medium">{user.name}</div>
-                <div className="text-muted-foreground">{user.email}</div>
-                <div>
-                  <Badge variant="outline">{user.role}</Badge>
+              <div
+                key={user.id}
+                className="md:grid md:grid-cols-6 gap-4 text-sm items-center py-3 border-b border-muted/50 hover:bg-muted/30 rounded-lg px-2 -mx-2 flex flex-col md:flex-row md:items-center"
+              >
+                {/* Mobile stacked layout */}
+                <div className="flex md:hidden flex-col w-full space-y-1 mb-2">
+                  <div className="flex justify-between"><span className="font-semibold">Name</span><span className="font-medium">{user.name}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Email</span><span className="text-muted-foreground">{user.email}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Role</span><span><Badge variant='outline'>{user.role}</Badge></span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Status</span><span><Badge variant={user.status === 'Active' ? 'secondary' : 'outline'}>{user.status}</Badge></span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Last Login</span><span className="text-muted-foreground">{user.lastLogin}</span></div>
+                  <div className="flex justify-between"><span className="font-semibold">Actions</span>
+                    <span className="flex space-x-2">
+                      <Button variant="ghost" size="sm"><Edit className="h-4 w-4" /></Button>
+                      <Button variant="ghost" size="sm"><Trash2 className="h-4 w-4" /></Button>
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <Badge variant={user.status === 'Active' ? 'secondary' : 'outline'}>
-                    {user.status}
-                  </Badge>
-                </div>
-                <div className="text-muted-foreground">{user.lastLogin}</div>
-                <div className="flex space-x-2">
-                  <Button variant="ghost" size="sm">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                {/* Desktop grid layout */}
+                <div className="hidden md:block font-medium">{user.name}</div>
+                <div className="hidden md:block text-muted-foreground">{user.email}</div>
+                <div className="hidden md:block"><Badge variant='outline'>{user.role}</Badge></div>
+                <div className="hidden md:block"><Badge variant={user.status === 'Active' ? 'secondary' : 'outline'}>{user.status}</Badge></div>
+                <div className="hidden md:block text-muted-foreground">{user.lastLogin}</div>
+                <div className="hidden md:block space-x-2">
+                  <Button variant="ghost" size="sm"><Edit className="h-4 w-4" /></Button>
+                  <Button variant="ghost" size="sm"><Trash2 className="h-4 w-4" /></Button>
                 </div>
               </div>
             ))}

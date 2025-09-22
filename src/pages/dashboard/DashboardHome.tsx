@@ -74,7 +74,7 @@ export default function DashboardHome() {
   return (
     <div className="space-y-8">
       {/* Main Dashboard Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Compliance Overview */}
         <Card className="lg:col-span-1">
           <CardHeader>
@@ -129,9 +129,9 @@ export default function DashboardHome() {
         </Card>
 
         {/* Digital Certificates */}
-        <Card className="lg:col-span-2">
+        <Card className="md:col-span-2 lg:col-span-2">
           <CardHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-center space-x-2">
                 <FileText className="h-5 w-5 text-primary" />
                 <div>
@@ -139,7 +139,7 @@ export default function DashboardHome() {
                   <CardDescription>Motor policy issuance & checks</CardDescription>
                 </div>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col xs:flex-row xs:space-x-4 md:space-x-4 gap-2 md:gap-0 w-full md:w-auto">
                 <div className="text-right">
                   <div className="text-2xl font-bold">1204</div>
                   <div className="text-xs text-muted-foreground">Issued (30d)</div>
@@ -156,7 +156,7 @@ export default function DashboardHome() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="flex space-x-2">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
               <Button variant="secondary" size="sm">
                 <Search className="h-4 w-4 mr-2" />
                 Verify
@@ -171,7 +171,7 @@ export default function DashboardHome() {
       </div>
 
       {/* Bottom Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Reports to NAICOM */}
         <Card className="lg:col-span-2">
           <CardHeader>
@@ -185,7 +185,8 @@ export default function DashboardHome() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="grid grid-cols-6 gap-4 text-sm font-medium text-muted-foreground border-b pb-2">
+              {/* Responsive Table Header */}
+              <div className="hidden md:grid grid-cols-6 gap-4 text-sm font-medium text-muted-foreground border-b pb-2">
                 <div>ID</div>
                 <div>Name</div>
                 <div>Period</div>
@@ -194,17 +195,32 @@ export default function DashboardHome() {
                 <div>Action</div>
               </div>
               {reports.map((report, index) => (
-                <div key={index} className="grid grid-cols-6 gap-4 text-sm items-center">
-                  <div className="font-medium">{report.id}</div>
-                  <div>{report.name}</div>
-                  <div className="text-muted-foreground">{report.period}</div>
-                  <div>
+                <div key={index} className="md:grid md:grid-cols-6 gap-4 text-sm items-center flex flex-col md:flex-row md:items-center border-b md:border-0 py-2 md:py-0">
+                  {/* Mobile stacked layout */}
+                  <div className="flex md:hidden flex-col w-full space-y-1 mb-2">
+                    <div className="flex justify-between"><span className="font-semibold">ID</span><span>{report.id}</span></div>
+                    <div className="flex justify-between"><span className="font-semibold">Name</span><span>{report.name}</span></div>
+                    <div className="flex justify-between"><span className="font-semibold">Period</span><span>{report.period}</span></div>
+                    <div className="flex justify-between"><span className="font-semibold">Status</span><span><Badge variant={report.status === 'Ready' ? 'secondary' : report.status === 'Submitted' ? 'default' : 'outline'}>{report.status}</Badge></span></div>
+                    <div className="flex justify-between"><span className="font-semibold">Updated</span><span>{report.updated}</span></div>
+                    <div className="flex justify-between"><span className="font-semibold">Action</span>
+                      <span className="flex space-x-2">
+                        <Button variant="outline" size="sm">Open</Button>
+                        <Button size="sm">Submit</Button>
+                      </span>
+                    </div>
+                  </div>
+                  {/* Desktop grid layout */}
+                  <div className="hidden md:block font-medium">{report.id}</div>
+                  <div className="hidden md:block">{report.name}</div>
+                  <div className="hidden md:block text-muted-foreground">{report.period}</div>
+                  <div className="hidden md:block">
                     <Badge variant={report.status === 'Ready' ? 'secondary' : report.status === 'Submitted' ? 'default' : 'outline'}>
                       {report.status}
                     </Badge>
                   </div>
-                  <div className="text-muted-foreground">{report.updated}</div>
-                  <div className="flex space-x-2">
+                  <div className="hidden md:block text-muted-foreground">{report.updated}</div>
+                  <div className="hidden md:block space-x-2">
                     <Button variant="outline" size="sm">Open</Button>
                     <Button size="sm">Submit</Button>
                   </div>
