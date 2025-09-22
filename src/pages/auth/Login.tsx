@@ -175,30 +175,6 @@ export default function Login() {
               </form>
             </CardContent>
           </Card>
-
-          {/* Demo Accounts */}
-          <Card className="border-dashed">
-            <CardContent className="pt-6">
-              <h3 className="font-semibold mb-3 text-center">Demo Accounts</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Insurer:</span>
-                  <span className="font-mono">insurer@demo.ticp.ng</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Regulator:</span>
-                  <span className="font-mono">regulator@demo.ticp.ng</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Fleet:</span>
-                  <span className="font-mono">fleet@demo.ticp.ng</span>
-                </div>
-                <div className="text-center text-muted-foreground mt-3">
-                  Password: <span className="font-mono">demo123</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </motion.div>
       </div>
     </div>

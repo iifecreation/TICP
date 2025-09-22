@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,9 +41,9 @@ const navigation = [
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
-
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [userRole, setUserRole] = useState("insurer");
   // Responsive nav state
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -70,7 +70,14 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               <Button variant="ghost" size="sm">
                 <Bell className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  // Add any logout logic here (e.g., clearing tokens)
+                  navigate("/login");
+                }}
+              >
                 logout
               </Button>
             </div>
